@@ -1,0 +1,4 @@
+firmware.elf
+firmware.elf.ihex
+src/main.o
+            
