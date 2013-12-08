@@ -197,7 +197,7 @@ void clear_bitmap() {
 /////////////////////////////////////////////////////////////////////
 //                                   static 5x7 graphics / symbols //
 /////////////////////////////////////////////////////////////////////
-#define CHARS 15
+#define CHARS 14
 const unsigned char charset[CHARS][5] PROGMEM = {
     { 0xFF, 0x41, 0x5D, 0x41, 0xFF },   // psycho 2
     { 0x00, 0x3E, 0x22, 0x3E, 0x00 },   // psycho 1
@@ -209,11 +209,16 @@ const unsigned char charset[CHARS][5] PROGMEM = {
     { 0x22, 0x14, 0x6B, 0x14, 0x22 },   // star2
     { 0x36, 0x36, 0x08, 0x36, 0x36 },   // star3
     { 0x06, 0x15, 0x69, 0x15, 0x06 },   // nuke
-    { 0x0F, 0x1A, 0x3E, 0x1A, 0x0F },   // fox
-    { 0x6C, 0x1A, 0x6F, 0x1A, 0x6C },   // alien
-    { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
-    { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
-    { 0x3D, 0x66, 0x7C, 0x66, 0x3D }    // alien
+//    { 0x0F, 0x1A, 0x3E, 0x1A, 0x0F },   // fox
+//    { 0x6C, 0x1A, 0x6F, 0x1A, 0x6C },   // alien
+//    { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
+//    { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
+//    { 0x3D, 0x66, 0x7C, 0x66, 0x3D },    // alien
+    { 0x12, 0x21, 0x21, 0x12, 0xc },   //C
+    { 0x0, 0x36, 0x9, 0x9, 0x3f },   //R
+    { 0x20, 0x20, 0x20, 0x20, 0x3f },   //L
+    { 0x30, 0xe, 0x5, 0xe, 0x30 }   //A
+       
 //  { 0x, 0x, 0x, 0x, 0x }
 };
 
@@ -298,6 +303,26 @@ void render_heartbeat() {
                 break;  
         case 3: clear_bitmap();
                 break;  
+    }
+}
+
+
+void render_clara() {
+    frame_delay = 40;
+
+    switch(frame%25) {
+        case 0: render_character(10); //C
+                break;
+        case 4: render_character(12); //L
+                break;
+        case 8: render_character(13); //A
+                break;
+        case 12: render_character(11); //R
+                 break;
+        case 16: render_character(13); //A
+                 break;
+        case 20: clear_bitmap();
+                 break;
     }
 }
 
@@ -392,7 +417,8 @@ void render_buffer() {
                 break;
         case 4: render_rain();
                 break;
-        case 5: render_fire();
+//        case 5: render_fire();
+        case 5: render_clara();
                 break;
         case 6: render_character(2);
                 break;

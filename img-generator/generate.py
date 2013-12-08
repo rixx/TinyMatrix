@@ -21,12 +21,13 @@ class Image(object):
         file_row = 0
 
         for line in src_file:
+            rev_line = line[4::-1]
             file_column = 0
 
             if file_row >= 7:
                 break
 
-            for char in line:
+            for char in rev_line:
                 if file_column >= 5:
                     break
 
