@@ -16,6 +16,7 @@
 // 2D LED buffer
 #define ROWS 5
 #define COLS 7
+#define EVER ;;
 
 
 char bitmap[ROWS][COLS];    
@@ -483,7 +484,7 @@ void init() {
 //                                              main loop // 
 //////////////////////////////////////////////////////////// 
 void main_loop() { 
-    for (;;) {
+    for (EVER) {
         if (need_render_frame)
             render_buffer();     
 
