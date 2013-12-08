@@ -42,23 +42,6 @@ ISR(TIMER0_COMPA_vect) {
 
 }
 
-// attach a piezo to PORTD6 and GND.
-void beep() {
-    int i;
-
-    return;
-    //  This routine is disabled.
-    //  I'm using PORTD6 as a redundant switch input right now.
-    //  It's at the bottom corner of the chip opposite GND.
-    //  Perfect place to dead-bug a pushbutton.
-
-    for (i=0; i<100; i++) {
-        PORTD = _BV(0) | _BV(5) | _BV(6);       _delay_us(100);
-        PORTD = 0;      _delay_us(100);
-    }
-    
-}
-
 
 /////////////////////////////////////////////////////////////////////
 // ATTENTION:                                                      //
