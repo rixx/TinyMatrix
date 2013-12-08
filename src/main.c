@@ -6,10 +6,10 @@
 
 #include <inttypes.h>
 #include <stdlib.h>
+#include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
-#include <util/delay.h>
 #include <avr/pgmspace.h>
 
 
@@ -39,7 +39,6 @@ ISR(TIMER0_COMPA_vect) {
 
     if (t++ % frame_delay == 0)
         need_render_frame = 1;
-
 }
 
 
@@ -53,7 +52,6 @@ ISR(TIMER0_COMPA_vect) {
 
 // Two drivers are provided here.
 // For Lite-on LTP-747 & LTP-757 families.
-
 #define LTP 747
 // #define LTP  757
 
@@ -76,24 +74,36 @@ void reset_led() {
 // energize row r (call once)
 void set_row(int r) { 
     switch(r) {
-        case 0: PORTD |= _BV(1);    break;
-        case 1: PORTA |= _BV(0);    break;
-        case 2: PORTB |= _BV(4);    break;
-        case 3: PORTB |= _BV(1);    break;
-        case 4: PORTB |= _BV(2);    break;
+        case 0: PORTD |= _BV(1);
+                break;
+        case 1: PORTA |= _BV(0);
+                break;
+        case 2: PORTB |= _BV(4);
+                break;
+        case 3: PORTB |= _BV(1);
+                break;
+        case 4: PORTB |= _BV(2);
+                break;
     }
 }
 
 // energize col c (call once for each lit pixel in column)
 void set_column(int c) {
     switch(c) {
-        case 6: PORTB &= ~_BV(6);       break;
-        case 1: PORTD &= ~_BV(3);       break;
-        case 2: PORTD &= ~_BV(2);       break;
-        case 4: PORTA &= ~_BV(1);       break;
-        case 3: PORTB &= ~_BV(3);       break;  
-        case 5: PORTB &= ~_BV(5);       break;
-        case 0: PORTD &= ~_BV(4);       break;
+        case 6: PORTB &= ~_BV(6);
+                break;
+        case 1: PORTD &= ~_BV(3);
+                break;
+        case 2: PORTD &= ~_BV(2);
+                break;
+        case 4: PORTA &= ~_BV(1);
+                break;
+        case 3: PORTB &= ~_BV(3);
+                break;  
+        case 5: PORTB &= ~_BV(5);
+                break;
+        case 0: PORTD &= ~_BV(4);
+                break;
     }   
 }
 
@@ -117,24 +127,36 @@ void reset_led() {
 // energize row r (call once)
 void set_row(int r) { 
     switch(r) {
-        case 0: PORTD &= ~_BV(1);   break;
-        case 1: PORTA &= ~_BV(0);   break;
-        case 2: PORTB &= ~_BV(4);   break;
-        case 3: PORTB &= ~_BV(1);   break;
-        case 4: PORTB &= ~_BV(2);   break;
+        case 0: PORTD &= ~_BV(1);
+                break;
+        case 1: PORTA &= ~_BV(0);
+                break;
+        case 2: PORTB &= ~_BV(4);
+                break;
+        case 3: PORTB &= ~_BV(1);
+                break;
+        case 4: PORTB &= ~_BV(2);
+                break;
     }
 }
 
 // energize col c (call once for each lit pixel in column)
 void set_column(int c) {
     switch(c) {
-        case 6: PORTB |= _BV(6);        break;
-        case 1: PORTD |= _BV(3);        break;
-        case 2: PORTD |= _BV(2);        break;
-        case 4: PORTA |= _BV(1);        break;
-        case 3: PORTB |= _BV(3);        break;  
-        case 5: PORTB |= _BV(5);        break;
-        case 0: PORTD |= _BV(4);        break;
+        case 6: PORTB |= _BV(6);
+                break;
+        case 1: PORTD |= _BV(3);
+                break;
+        case 2: PORTD |= _BV(2);
+                break;
+        case 4: PORTA |= _BV(1);
+                break;
+        case 3: PORTB |= _BV(3);
+                break;  
+        case 5: PORTB |= _BV(5);
+                break;
+        case 0: PORTD |= _BV(4);
+                break;
     }   
 }
 
@@ -155,8 +177,6 @@ void refresh_line() {
     
     for (c=0; c<COLS; c++) 
         if (bitmap[current_row][c]) set_column(c);
-
-    /* GARY - Tuesday Sept 26 11:44pm */
 
     need_refresh_line = 0;
 }
@@ -224,7 +244,6 @@ void render_checkerboard() {
     frame_delay = 300;
 
     // fill the frame buffer with a procedural pattern
-
     for (c=0; c<COLS; c++)
         for (r=0; r<ROWS; r++) {
             bitmap[r][c] = (r + c + frame) % 2;
@@ -240,13 +259,16 @@ void render_rain() {
     // this is a modulus based particle system
 
     y = frame%19;   
-    if (y<COLS) bitmap[0][y] = 1;
+    if (y<COLS) 
+        bitmap[0][y] = 1;
 
     y = frame%11;   
-    if (y<COLS) bitmap[2][y] = 1;
+    if (y<COLS)
+        bitmap[2][y] = 1;
 
     y = frame%17;   
-    if (y<COLS) bitmap[4][y] = 1;
+    if (y<COLS)
+        bitmap[4][y] = 1;
 }
 
 
@@ -255,8 +277,10 @@ void render_psycho() {
 
     // simple 2 frame animation
     
-    if (frame%2) render_character(0);
-    else render_character(1);
+    if (frame%2)
+        render_character(0);
+    else
+        render_character(1);
 }
 
 void render_heartbeat() {
@@ -265,10 +289,14 @@ void render_heartbeat() {
     // how to sequence frames using case statement
 
     switch (frame%10) {
-        case 0: render_character(3);    break;  
-        case 1: clear_bitmap();         break;  
-        case 2: render_character(3);    break;  
-        case 3: clear_bitmap();         break;  
+        case 0: render_character(3);
+                break;  
+        case 1: clear_bitmap();
+                break;  
+        case 2: render_character(3);
+                break;  
+        case 3: clear_bitmap();
+                break;  
     }
 }
 
@@ -281,29 +309,68 @@ void render_fire() {
     // another modulus based particle system
 
     // fire body
-    r = (frame+0)%3;    bitmap[0][6-r] = 1;
-    r = (frame+1)%2;    bitmap[1][6-r] = 1;
-    r = (frame+0)%2;    bitmap[2][6-r] = 1;
-    r = (frame+1)%2;    bitmap[3][6-r] = 1;
-    r = (frame+1)%3;    bitmap[4][6-r] = 1;
+    r = (frame+0)%3;
+    bitmap[0][6-r] = 1;
+    
+    r = (frame+1)%2;
+    bitmap[1][6-r] = 1;
 
-    r = (frame+1)%5;    bitmap[1][6-r] = 1;
-    r = (frame+0)%3;    bitmap[2][6-r] = 1;
-    r = (frame+2)%5;    bitmap[3][6-r] = 1;
+    r = (frame+0)%2;
+    bitmap[2][6-r] = 1;
 
-    r = (frame+4)%4;    bitmap[0][6-r] = 1;
-    r = (frame+1)%4;    bitmap[1][6-r] = 1;
-    r = (frame+0)%4;    bitmap[2][6-r] = 1;
-    r = (frame+3)%4;    bitmap[3][6-r] = 1;
-    r = (frame+2)%4;    bitmap[4][6-r] = 1;
+    r = (frame+1)%2;
+    bitmap[3][6-r] = 1;
+
+    r = (frame+1)%3;
+    bitmap[4][6-r] = 1;
+
+
+    r = (frame+1)%5;
+    bitmap[1][6-r] = 1;
+
+    r = (frame+0)%3;
+    bitmap[2][6-r] = 1;
+
+    r = (frame+2)%5;
+    bitmap[3][6-r] = 1;
+
+
+    r = (frame+4)%4;
+    bitmap[0][6-r] = 1;
+
+    r = (frame+1)%4;
+    bitmap[1][6-r] = 1;
+
+    r = (frame+0)%4;
+    bitmap[2][6-r] = 1;
+
+    r = (frame+3)%4;
+    bitmap[3][6-r] = 1;
+
+    r = (frame+2)%4;
+    bitmap[4][6-r] = 1;
+
 
     // sparks
-    r = (frame+0)%19;   if (r<COLS) bitmap[0][6-r] = 1;
-    r = (frame+0)%6;    if (r<COLS) bitmap[1][6-r] = 1;
-    r = (frame+0)%7;    if (r<COLS) bitmap[2][6-r] = 1;
-    r = (frame+2)%6;    if (r<COLS) bitmap[3][6-r] = 1;
-    r = (frame+0)%17;   if (r<COLS) bitmap[4][6-r] = 1;
+    r = (frame+0)%19;
+    if (r<COLS)
+        bitmap[0][6-r] = 1;
 
+    r = (frame+0)%6;
+    if (r<COLS)
+        bitmap[1][6-r] = 1;
+
+    r = (frame+0)%7;
+    if (r<COLS)
+        bitmap[2][6-r] = 1;
+
+    r = (frame+2)%6;
+    if (r<COLS)
+        bitmap[3][6-r] = 1;
+
+    r = (frame+0)%17;
+    if (r<COLS)
+        bitmap[4][6-r] = 1;
 }
 
 
@@ -315,25 +382,43 @@ void render_buffer() {
     frame++;
     need_render_frame = 0;
     
-    switch(mode) {
-        case 1: render_checkerboard();  break;
-        case 2: render_psycho();    break;
-        case 3: render_heartbeat(); break;
-        case 4: render_rain();      break;
-        case 5: render_fire();      break;
-        case 6: render_character(2);    break;
-        case 7: render_character(3);    break;
-        case 8: render_character(4);    break;
-        case 9: render_character(5);    break;
-        case 10: render_character(6);   break;
-        case 11: render_character(7);   break;
-        case 12: render_character(8);   break;
-        case 13: render_character(9);   break;
-        case 14: render_character(10);  break;
-        case 15: render_character(11);  break;
-        case 16: render_character(12);  break;
-        case 17: render_character(13);  break;
-        case 18: render_character(14);  break;
+    switch (mode) {
+        case 1: render_checkerboard();
+                break;
+        case 2: render_psycho();
+                break;
+        case 3: render_heartbeat();
+                break;
+        case 4: render_rain();
+                break;
+        case 5: render_fire();
+                break;
+        case 6: render_character(2);
+                break;
+        case 7: render_character(3);
+                break;
+        case 8: render_character(4);
+                break;
+        case 9: render_character(5);
+                break;
+        case 10: render_character(6);
+                 break;
+        case 11: render_character(7);
+                 break;
+        case 12: render_character(8);
+                 break;
+        case 13: render_character(9);
+                 break;
+        case 14: render_character(10);
+                 break;
+        case 15: render_character(11);
+                 break;
+        case 16: render_character(12);
+                 break;
+        case 17: render_character(13);
+                 break;
+        case 18: render_character(14);
+                 break;
     }
 }
 
@@ -341,18 +426,35 @@ void render_buffer() {
 // increment/decrement 'mode' in response.
 void check_inputs() {
     // button 1 state (PORTD0 or PORTD6)
-    if ((PIND & _BV(0)) == 0 || (PIND & _BV(6)) == 0) b1++; else b1 = 0;
+    if ((PIND & _BV(0)) == 0 || (PIND & _BV(6)) == 0)
+        b1++;
+    else 
+        b1 = 0;
 
     // button 2 state (PORTD5)
-    if ((PIND & _BV(5)) == 0) b2++; else b2 = 0;
+    if ((PIND & _BV(5)) == 0) 
+        b2++;
+    else
+        b2 = 0;
 
     // rudimentary de-bouncing
-    if (b2 == 10)       { beep(); mode--; need_render_frame = 1; }
-    if (b1 == 10)       { beep(); mode++; need_render_frame = 1; }
+    if (b2 == 10) {
+        beep();
+        mode--;
+        need_render_frame = 1;
+    }
+    
+    if (b1 == 10) {
+        beep();
+        mode++;
+        need_render_frame = 1;
+    }
 
     // wraparound (optional)
-    if (mode > MODES) mode = 1;
-    if (mode < 1) mode = MODES;
+    if (mode > MODES)
+        mode = 1;
+    if (mode < 1)
+        mode = MODES;
 }
 
 
@@ -374,7 +476,7 @@ void init() {
 
     sei();
 
-    mode = 6;   // Initial display pattern
+    mode = 5;   // Initial display pattern
 }
 
 //////////////////////////////////////////////////////////// 
@@ -382,7 +484,9 @@ void init() {
 //////////////////////////////////////////////////////////// 
 void main_loop() { 
     for (;;) {
-        if (need_render_frame) render_buffer();     
+        if (need_render_frame)
+            render_buffer();     
+
         if (need_refresh_line) {   
             refresh_line();
             check_inputs();
@@ -395,6 +499,7 @@ void main_loop() {
 //                                                  main  //
 ////////////////////////////////////////////////////////////
 int main(void) {
+
     init();
     main_loop();
     return (0);
