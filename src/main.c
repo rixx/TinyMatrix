@@ -29,8 +29,7 @@ int b1, last_b1, b2, last_b2;   // button states
 
 
 // LED refresh interrupt, called 390 times per second
-ISR(TIMER0_COMPA_vect)
-{
+ISR(TIMER0_COMPA_vect) {
     need_refresh_line = 1;  // flag to display new row of LEDs
 
     if (++current_row >= ROWS) 
@@ -42,8 +41,7 @@ ISR(TIMER0_COMPA_vect)
 }
 
 // attach a piezo to PORTD6 and GND.
-void beep()
-{
+void beep() {
     int i;
 
     return;
@@ -52,8 +50,7 @@ void beep()
     //  It's at the bottom corner of the chip opposite GND.
     //  Perfect place to dead-bug a pushbutton.
 
-    for(i=0; i<100; i++)
-    {
+    for (i=0; i<100; i++) {
         PORTD = _BV(0) | _BV(5) | _BV(6);       _delay_us(100);
         PORTD = 0;      _delay_us(100);
     }
@@ -82,8 +79,7 @@ void beep()
 // Set port pins high and low in such order as to turn off the LED.
 // This depends on the LED's cathode / anode arrangement etc.  
 // At the same time, preserve pull-up resistors for switches.
-void reset_led()
-{
+void reset_led() {
     // keep pull-up resistors active    
     PORTD = _BV(0) | _BV(5) | _BV(6);
         
@@ -94,10 +90,8 @@ void reset_led()
 }
 
 // energize row r (call once)
-void set_row(int r) 
-{ 
-    switch(r)
-    {
+void set_row(int r) { 
+    switch(r) {
         case 0: PORTD |= _BV(1);    break;
         case 1: PORTA |= _BV(0);    break;
         case 2: PORTB |= _BV(4);    break;
@@ -107,10 +101,8 @@ void set_row(int r)
 }
 
 // energize col c (call once for each lit pixel in column)
-void set_column(int c)
-{
-    switch(c)
-    {
+void set_column(int c) {
+    switch(c) {
         case 6: PORTB &= ~_BV(6);       break;
         case 1: PORTD &= ~_BV(3);       break;
         case 2: PORTD &= ~_BV(2);       break;
@@ -128,8 +120,7 @@ void set_column(int c)
 // Set port pins high and low in such order as to turn off the LED.
 // This depends on the LED's cathode / anode arrangement etc.  
 // At the same time, preserve pull-up resistors for switches.
-void reset_led()
-{
+void reset_led() {
     // keep pull-up resistors active    
     PORTD = _BV(0) | _BV(5) | _BV(6);
         
@@ -140,10 +131,8 @@ void reset_led()
 }
 
 // energize row r (call once)
-void set_row(int r) 
-{ 
-    switch(r)
-    {
+void set_row(int r)  { 
+    switch(r) {
         case 0: PORTD &= ~_BV(1);   break;
         case 1: PORTA &= ~_BV(0);   break;
         case 2: PORTB &= ~_BV(4);   break;
@@ -153,10 +142,8 @@ void set_row(int r)
 }
 
 // energize col c (call once for each lit pixel in column)
-void set_column(int c)
-{
-    switch(c)
-    {
+void set_column(int c) {
+    switch(c) {
         case 6: PORTB |= _BV(6);        break;
         case 1: PORTD |= _BV(3);        break;
         case 2: PORTD |= _BV(2);        break;
@@ -176,8 +163,7 @@ void set_column(int c)
 
 
 // render and energize the current row, based on bitmap array
-void refresh_line()
-{
+void refresh_line() {
     int c;
 
     reset_led();
@@ -193,8 +179,7 @@ void refresh_line()
 
 
 // zero out the bitmap array
-void clear_bitmap()
-{
+void clear_bitmap() {
     int c,r;
 
     for (c=0; c<COLS; c++)
@@ -208,8 +193,7 @@ void clear_bitmap()
 //                                   static 5x7 graphics / symbols //
 /////////////////////////////////////////////////////////////////////
 #define CHARS 15
-const unsigned char charset[CHARS][5] PROGMEM = 
-{
+const unsigned char charset[CHARS][5] PROGMEM = {
     { 0xFF, 0x41, 0x5D, 0x41, 0xFF },   // psycho 2
     { 0x00, 0x3E, 0x22, 0x3E, 0x00 },   // psycho 1
     { 0x0E, 0x3B, 0x17, 0x3B, 0x0E },   // skull
@@ -230,14 +214,12 @@ const unsigned char charset[CHARS][5] PROGMEM =
 
 
 // renders character c onto the bitmap
-void render_character(int c)
-{
+void render_character(int c) {
     int x,y, byte;
 
     clear_bitmap();
 
-    for (y=0; y<ROWS; y++)
-    {
+    for (y=0; y<ROWS; y++) {
         byte = pgm_read_byte(&(charset[c][y]));
 
         for (x=0; x<COLS; x++)
@@ -253,8 +235,7 @@ void render_character(int c)
 //                                                      animations //
 /////////////////////////////////////////////////////////////////////
 
-void render_checkerboard()
-{
+void render_checkerboard() {
     int c,r;
 
     frame_delay = 300;
@@ -268,8 +249,7 @@ void render_checkerboard()
         }
 }
 
-void render_rain()
-{
+void render_rain() {
     int y;
 
     frame_delay = 20;
@@ -288,8 +268,7 @@ void render_rain()
 }
 
 
-void render_psycho()
-{
+void render_psycho() {
     frame_delay = 30;
 
     // simple 2 frame animation
@@ -298,14 +277,12 @@ void render_psycho()
     else render_character(1);
 }
 
-void render_heartbeat()
-{
+void render_heartbeat() {
     frame_delay = 40;
 
     // how to sequence frames using case statement
 
-    switch (frame%10)
-    {
+    switch (frame%10) {
         case 0: render_character(3);    break;  
         case 1: clear_bitmap();         break;  
         case 2: render_character(3);    break;  
@@ -313,8 +290,7 @@ void render_heartbeat()
     }
 }
 
-void render_fire()
-{
+void render_fire() {
     int r;
 
     frame_delay = 40;
@@ -353,13 +329,11 @@ void render_fire()
 
 // renders the correct image / animation onto the bitmap
 #define MODES 18
-void render_buffer()
-{
+void render_buffer() {
     frame++;
     need_render_frame = 0;
     
-    switch(mode)
-    {
+    switch(mode) {
         case 1: render_checkerboard();  break;
         case 2: render_psycho();    break;
         case 3: render_heartbeat(); break;
@@ -383,8 +357,7 @@ void render_buffer()
 
 // poll the pushbuttons, and record their states.
 // increment/decrement 'mode' in response.
-void check_inputs()
-{
+void check_inputs() {
     // button 1 state (PORTD0 or PORTD6)
     if ((PIND & _BV(0)) == 0 || (PIND & _BV(6)) == 0) b1++; else b1 = 0;
 
@@ -405,8 +378,7 @@ void check_inputs()
 ////////////////////////////////////////////////////////////
 //                                         initialization //
 ////////////////////////////////////////////////////////////
-void init()
-{
+void init() {
     // set output pins
     DDRA = _BV(0) | _BV(1);
     DDRB = _BV(1) | _BV(2) | _BV(3) | _BV(4) | _BV(5) | _BV(6);
@@ -426,10 +398,8 @@ void init()
 //////////////////////////////////////////////////////////// 
 //                                              main loop // 
 //////////////////////////////////////////////////////////// 
-void main_loop() 
-{ 
-    for (;;)
-    {
+void main_loop() { 
+    for (;;) {
         if (need_render_frame) render_buffer();     
         if (need_refresh_line)  
         {   
@@ -445,8 +415,7 @@ void main_loop()
 ////////////////////////////////////////////////////////////
 //                                                  main  //
 ////////////////////////////////////////////////////////////
-int main (void)
-{
+int main(void) {
     init();
     main_loop();
     return (0);
