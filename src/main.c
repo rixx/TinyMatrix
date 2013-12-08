@@ -14,8 +14,10 @@
 
 
 // 2D LED buffer
-#define ROWS        5
-#define COLS        7
+#define ROWS 5
+#define COLS 7
+
+
 char bitmap[ROWS][COLS];    
 char need_refresh_line;
 char need_render_frame;
@@ -35,7 +37,7 @@ ISR(TIMER0_COMPA_vect) {
     if (++current_row >= ROWS) 
         current_row = 0;
 
-    if ( (t++%frame_delay) == 0 )
+    if (t++ % frame_delay == 0)
         need_render_frame = 1;
 
 }
@@ -71,7 +73,6 @@ void beep() {
 
 #define LTP 747
 // #define LTP  757
-
 
 
 #if LTP == 747
@@ -131,7 +132,7 @@ void reset_led() {
 }
 
 // energize row r (call once)
-void set_row(int r)  { 
+void set_row(int r) { 
     switch(r) {
         case 0: PORTD &= ~_BV(1);   break;
         case 1: PORTA &= ~_BV(0);   break;
@@ -222,8 +223,7 @@ void render_character(int c) {
     for (y=0; y<ROWS; y++) {
         byte = pgm_read_byte(&(charset[c][y]));
 
-        for (x=0; x<COLS; x++)
-        {
+        for (x=0; x<COLS; x++) {
             if (byte & _BV(0)) bitmap[y][x] = 1;
             byte = byte >> 1;
         }       
@@ -243,9 +243,8 @@ void render_checkerboard() {
     // fill the frame buffer with a procedural pattern
 
     for (c=0; c<COLS; c++)
-        for (r=0; r<ROWS; r++)
-        {
-            bitmap[r][c] = (r + c + frame) % 2 ;
+        for (r=0; r<ROWS; r++) {
+            bitmap[r][c] = (r + c + frame) % 2;
         }
 }
 
@@ -401,15 +400,12 @@ void init() {
 void main_loop() { 
     for (;;) {
         if (need_render_frame) render_buffer();     
-        if (need_refresh_line)  
-        {   
+        if (need_refresh_line) {   
             refresh_line();
             check_inputs();
         }
     }   
 }
-
-
 
 
 ////////////////////////////////////////////////////////////
