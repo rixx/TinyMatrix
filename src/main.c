@@ -440,13 +440,13 @@ void check_inputs() {
 
     // rudimentary de-bouncing
     if (b2 == 10) {
-        beep();
+        //beep();
         mode--;
         need_render_frame = 1;
     }
     
     if (b1 == 10) {
-        beep();
+        //beep();
         mode++;
         need_render_frame = 1;
     }
