@@ -1,4 +1,4 @@
 firmware.elf
 firmware.elf.ihex
 src/main.o
-**/*.pixx            
+img-generator/*.pixx            
