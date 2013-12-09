@@ -326,7 +326,7 @@ void render_clara() {
 }
 
 void render_fire() {
-    int r;
+    int r, c;
 
     frame_delay = 40;
     clear_bitmap();
@@ -334,46 +334,43 @@ void render_fire() {
     // another modulus based particle system
 
     // fire body
-    r = (frame)%3;
-    bitmap[0][6-r] = 1;
-    
-    r = (frame+1)%2;
-    bitmap[1][6-r] = 1;
-
+        
     r = (frame)%2;
     bitmap[2][6-r] = 1;
 
-    r = (frame+1)%2;
-    bitmap[3][6-r] = 1;
-
-    r = (frame+1)%3;
-    bitmap[4][6-r] = 1;
-
-
-    r = (frame+1)%5;
-    bitmap[1][6-r] = 1;
+    r = !r;
+    c = 6 - r;
+    bitmap[1][c] = 1;
+    bitmap[3][c] = 1;
 
     r = (frame)%3;
-    bitmap[2][6-r] = 1;
-
-    r = (frame+2)%5;
-    bitmap[3][6-r] = 1;
-
-
-    r = (frame+4)%4;
-    bitmap[0][6-r] = 1;
-
-    r = (frame+1)%4;
-    bitmap[1][6-r] = 1;
+    c = 6 - r;
+    bitmap[0][c] = 1;
+    bitmap[2][c] = 1;
 
     r = (frame)%4;
     bitmap[2][6-r] = 1;
 
-    r = (frame+3)%4;
-    bitmap[3][6-r] = 1;
+    r = (frame+1)%3;
+    bitmap[4][6-r] = 1;
+
+    r = (frame+1)%4;
+    bitmap[1][6-r] = 1;
+
+    r = (frame+1)%5;
+    bitmap[1][6-r] = 1;
 
     r = (frame+2)%4;
     bitmap[4][6-r] = 1;
+
+    r = (frame+2)%5;
+    bitmap[3][6-r] = 1;
+
+    r = (frame+3)%4;
+    bitmap[3][6-r] = 1;
+
+    r = (frame+4)%4;
+    bitmap[0][6-r] = 1;
 
 
     // sparks
@@ -416,8 +413,8 @@ void render_buffer() {
                 break;
         case 4: render_rain();
                 break;
-//        case 5: render_fire();
-        case 5: render_clara();
+        case 5: render_fire();
+//        case 5: render_clara();
                 break;
         case 6: render_character(2);
                 break;
