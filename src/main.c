@@ -26,7 +26,7 @@ unsigned char current_row;      // current lit row
 
 
 // globals
-uint16_t mode;                       // current display mode
+int mode;                       // current display mode
 int t, frame, frame_delay;      // animation timing variables
 int b1, last_b1;   // button states
 
@@ -351,25 +351,25 @@ void render_fire() {
     r = (frame)%4;
     bitmap[2][6-r] = 1;
 
-    r = (frame+1)%3;
+    r = (frame + 1)%3;
     bitmap[4][6-r] = 1;
 
-    r = (frame+1)%4;
+    r = (frame + 1)%4;
     bitmap[1][6-r] = 1;
 
-    r = (frame+1)%5;
+    r = (frame + 1)%5;
     bitmap[1][6-r] = 1;
 
-    r = (frame+2)%4;
+    r = (frame + 2)%4;
     bitmap[4][6-r] = 1;
 
-    r = (frame+2)%5;
+    r = (frame + 2)%5;
     bitmap[3][6-r] = 1;
 
-    r = (frame+3)%4;
+    r = (frame + 3)%4;
     bitmap[3][6-r] = 1;
 
-    r = (frame+4)%4;
+    r = (frame + 4)%4;
     bitmap[0][6-r] = 1;
 
 
@@ -455,16 +455,9 @@ void check_inputs() {
         b1 = 0;
 
     if (b1 == 10) {
-        //beep();
-        mode++;
+        mode = ++mode % MODES;
         need_render_frame = 1;
     }
-
-    // wraparound (optional)
-    if (mode > MODES)
-        mode = 1;
-    if (mode < 1)
-        mode = MODES;
 }
 
 
