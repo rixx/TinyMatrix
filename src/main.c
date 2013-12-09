@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////
-// TinyMatrix.c                                           //
+// TinyMatrix.c                                           //
 // copyright 2012 Tim Toner (tigeruppp/at/gmail.com)      //
 // licensed under the GNU GPL v2 or newer                 //
 ////////////////////////////////////////////////////////////
@@ -26,9 +26,9 @@ unsigned char current_row;      // current lit row
 
 
 // globals
-int mode;                       // current display mode
+uint16_t mode;                       // current display mode
 int t, frame, frame_delay;      // animation timing variables
-int b1, last_b1, b2, last_b2;   // button states
+int b1, last_b1;   // button states
 
 
 // LED refresh interrupt, called 390 times per second
@@ -63,13 +63,10 @@ ISR(TIMER0_COMPA_vect) {
 // This depends on the LED's cathode / anode arrangement etc.  
 // At the same time, preserve pull-up resistors for switches.
 void reset_led() {
-    // keep pull-up resistors active    
-    PORTD = _BV(0) | _BV(5) | _BV(6);
-        
-    // hi/low the port pins to power off LED. (see datasheets)
+    // keep pull-up resistors active    AND hi/low the port pins to power off LED (see datasheets)
+    PORTD = _BV(0) | _BV(5) | _BV(6)    | _BV(2) | _BV(3) | _BV(4);
     PORTA = _BV(1);
     PORTB = _BV(3) | _BV(5) | _BV(6);
-    PORTD |= _BV(2) | _BV(3) | _BV(4);
 }
 
 // energize row r (call once)
@@ -176,8 +173,9 @@ void refresh_line() {
     reset_led();
     set_row(current_row);
     
-    for (c=0; c<COLS; c++) 
-        if (bitmap[current_row][c]) set_column(c);
+    for (c = 0; c < COLS; c++) 
+        if (bitmap[current_row][c]) 
+            set_column(c);
 
     need_refresh_line = 0;
 }
@@ -185,11 +183,11 @@ void refresh_line() {
 
 // zero out the bitmap array
 void clear_bitmap() {
-    int c,r;
+    int c, r;
 
-    for (c=0; c<COLS; c++)
-        for (r=0; r<ROWS; r++)
-            bitmap[r][c] = 0 ;
+    for (c = 0; c < COLS; c++)
+        for (r = 0; r < ROWS; r++)
+            bitmap[r][c] = 0;
 }
 
 
@@ -197,7 +195,7 @@ void clear_bitmap() {
 /////////////////////////////////////////////////////////////////////
 //                                   static 5x7 graphics / symbols //
 /////////////////////////////////////////////////////////////////////
-#define CHARS 14
+#define CHARS 15
 const unsigned char charset[CHARS][5] PROGMEM = {
     { 0xFF, 0x41, 0x5D, 0x41, 0xFF },   // psycho 2
     { 0x00, 0x3E, 0x22, 0x3E, 0x00 },   // psycho 1
@@ -209,7 +207,7 @@ const unsigned char charset[CHARS][5] PROGMEM = {
     { 0x22, 0x14, 0x6B, 0x14, 0x22 },   // star2
     { 0x36, 0x36, 0x08, 0x36, 0x36 },   // star3
     { 0x06, 0x15, 0x69, 0x15, 0x06 },   // nuke
-//    { 0x0F, 0x1A, 0x3E, 0x1A, 0x0F },   // fox
+    { 0x0F, 0x1A, 0x3E, 0x1A, 0x0F },   // fox
 //    { 0x6C, 0x1A, 0x6F, 0x1A, 0x6C },   // alien
 //    { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
 //    { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
@@ -225,15 +223,16 @@ const unsigned char charset[CHARS][5] PROGMEM = {
 
 // renders character c onto the bitmap
 void render_character(int c) {
-    int x,y, byte;
+    int x, y, byte;
 
     clear_bitmap();
 
-    for (y=0; y<ROWS; y++) {
+    for (y = 0; y < ROWS; y++) {
         byte = pgm_read_byte(&(charset[c][y]));
 
-        for (x=0; x<COLS; x++) {
-            if (byte & _BV(0)) bitmap[y][x] = 1;
+        for (x = 0; x < COLS; x++) {
+            if (byte & _BV(0)) 
+                bitmap[y][x] = 1;
             byte = byte >> 1;
         }       
     }   
@@ -245,13 +244,13 @@ void render_character(int c) {
 /////////////////////////////////////////////////////////////////////
 
 void render_checkerboard() {
-    int c,r;
+    int c, r;
 
     frame_delay = 300;
 
     // fill the frame buffer with a procedural pattern
-    for (c=0; c<COLS; c++)
-        for (r=0; r<ROWS; r++) {
+    for (c = 0; c < COLS; c++)
+        for (r = 0; r < ROWS; r++) {
             bitmap[r][c] = (r + c + frame) % 2;
         }
 }
@@ -265,15 +264,15 @@ void render_rain() {
     // this is a modulus based particle system
 
     y = frame%19;   
-    if (y<COLS) 
+    if (y < COLS) 
         bitmap[0][y] = 1;
 
     y = frame%11;   
-    if (y<COLS)
+    if (y < COLS)
         bitmap[2][y] = 1;
 
     y = frame%17;   
-    if (y<COLS)
+    if (y < COLS)
         bitmap[4][y] = 1;
 }
 
@@ -335,13 +334,13 @@ void render_fire() {
     // another modulus based particle system
 
     // fire body
-    r = (frame+0)%3;
+    r = (frame)%3;
     bitmap[0][6-r] = 1;
     
     r = (frame+1)%2;
     bitmap[1][6-r] = 1;
 
-    r = (frame+0)%2;
+    r = (frame)%2;
     bitmap[2][6-r] = 1;
 
     r = (frame+1)%2;
@@ -354,7 +353,7 @@ void render_fire() {
     r = (frame+1)%5;
     bitmap[1][6-r] = 1;
 
-    r = (frame+0)%3;
+    r = (frame)%3;
     bitmap[2][6-r] = 1;
 
     r = (frame+2)%5;
@@ -367,7 +366,7 @@ void render_fire() {
     r = (frame+1)%4;
     bitmap[1][6-r] = 1;
 
-    r = (frame+0)%4;
+    r = (frame)%4;
     bitmap[2][6-r] = 1;
 
     r = (frame+3)%4;
@@ -378,15 +377,15 @@ void render_fire() {
 
 
     // sparks
-    r = (frame+0)%19;
+    r = (frame)%17;
     if (r<COLS)
         bitmap[0][6-r] = 1;
 
-    r = (frame+0)%6;
+    r = (frame)%6;
     if (r<COLS)
         bitmap[1][6-r] = 1;
 
-    r = (frame+0)%7;
+    r = (frame)%7;
     if (r<COLS)
         bitmap[2][6-r] = 1;
 
@@ -394,7 +393,7 @@ void render_fire() {
     if (r<COLS)
         bitmap[3][6-r] = 1;
 
-    r = (frame+0)%17;
+    r = (frame)%19;
     if (r<COLS)
         bitmap[4][6-r] = 1;
 }
@@ -458,19 +457,6 @@ void check_inputs() {
     else 
         b1 = 0;
 
-    // button 2 state (PORTD5)
-    if ((PIND & _BV(5)) == 0) 
-        b2++;
-    else
-        b2 = 0;
-
-    // rudimentary de-bouncing
-    if (b2 == 10) {
-        //beep();
-        mode--;
-        need_render_frame = 1;
-    }
-    
     if (b1 == 10) {
         //beep();
         mode++;
