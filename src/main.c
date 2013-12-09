@@ -1,6 +1,7 @@
 ////////////////////////////////////////////////////////////
 // TinyMatrix.c                                           //
 // copyright 2012 Tim Toner (tigeruppp/at/gmail.com)      //
+// modified 2013 rixx (git/at/foyfoy.de)
 // licensed under the GNU GPL v2 or newer                 //
 ////////////////////////////////////////////////////////////
 
