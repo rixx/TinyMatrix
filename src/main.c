@@ -212,13 +212,7 @@ const unsigned char charset[CHARS][5] PROGMEM = {
     { 0x6C, 0x1A, 0x6F, 0x1A, 0x6C },   // alien
     { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
     { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
-    { 0x3D, 0x66, 0x7C, 0x66, 0x3D },    // alien
-//    { 0x12, 0x21, 0x21, 0x12, 0xc },   //C
-//    { 0x0, 0x36, 0x9, 0x9, 0x3f },   //R
-//    { 0x20, 0x20, 0x20, 0x20, 0x3f },   //L
-//    { 0x30, 0xe, 0x5, 0xe, 0x30 }   //A
-       
-//  { 0x, 0x, 0x, 0x, 0x }
+    { 0x3D, 0x66, 0x7C, 0x66, 0x3D },   // alien
 };
 
 
@@ -306,26 +300,6 @@ void render_heartbeat() {
     }
 }
 
-/*
-void render_clara() {
-    frame_delay = 40;
-
-    switch(frame%25) {
-        case 0: render_character(10); //C
-                break;
-        case 4: render_character(12); //L
-                break;
-        case 8: render_character(13); //A
-                break;
-        case 12: render_character(11); //R
-                 break;
-        case 16: render_character(13); //A
-                 break;
-        case 20: clear_bitmap();
-                 break;
-    }
-}
-*/
 void render_fire() {
     int r, c;
 
@@ -335,7 +309,6 @@ void render_fire() {
     // another modulus based particle system
 
     // fire body
-        
     r = (frame)%2;
     bitmap[2][6-r] = 1;
 
@@ -397,8 +370,6 @@ void render_fire() {
 }
 
 
-
-
 // renders the correct image / animation onto the bitmap
 #define MODES 18
 void render_buffer() {
@@ -448,6 +419,7 @@ void render_buffer() {
 // poll the pushbuttons, and record their states.
 // increment/decrement 'mode' in response.
 void check_inputs() {
+
     // button 1 state (PORTD0 or PORTD6)
     if ((PIND & _BV(0)) == 0 || (PIND & _BV(6)) == 0)
         b1++;
