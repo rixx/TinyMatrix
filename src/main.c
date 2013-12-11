@@ -73,7 +73,7 @@ void clear_bitmap() {
 /////////////////////////////////////////////////////////////////////
 //                                   static 5x7 graphics / symbols //
 /////////////////////////////////////////////////////////////////////
-#define CHARS 15
+#define CHARS 18
 const unsigned char charset[CHARS][5] PROGMEM = {
     { 0xFF, 0x41, 0x5D, 0x41, 0xFF },   // psycho 2
     { 0x00, 0x3E, 0x22, 0x3E, 0x00 },   // psycho 1
@@ -84,12 +84,16 @@ const unsigned char charset[CHARS][5] PROGMEM = {
     { 0x07, 0x49, 0x71, 0x49, 0x07 },   // cup
     { 0x22, 0x14, 0x6B, 0x14, 0x22 },   // star2
     { 0x36, 0x36, 0x08, 0x36, 0x36 },   // star3
-    { 0x06, 0x15, 0x69, 0x15, 0x06 },   // nuke
     { 0x0F, 0x1A, 0x3E, 0x1A, 0x0F },   // fox
     { 0x6C, 0x1A, 0x6F, 0x1A, 0x6C },   // alien
     { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
     { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
     { 0x3D, 0x66, 0x7C, 0x66, 0x3D },   // alien
+    { 0x30, 0xe, 0x5, 0xe, 0x30 },      //A
+    { 0x12, 0x21, 0x21, 0x12, 0xc },    //C
+    { 0x20, 0x20, 0x20, 0x20, 0x3f },   //L
+    { 0x0, 0x36, 0x9, 0x9, 0x3f }       //R
+
 };
 
 
@@ -158,6 +162,25 @@ void render_psycho() {
         render_character(0);
     else
         render_character(1);
+}
+
+void render_clara() {
+    frame_delay = 40;
+    switch(frame%25) {
+
+        case 0: render_character(15); //C
+                break;
+        case 4: render_character(16); //L
+                break;
+        case 8: render_character(14); //A
+                break;
+        case 12: render_character(17); //R
+                 break;
+        case 16: render_character(14); //A
+                 break;
+        case 20: clear_bitmap();
+                 break;
+    }
 }
 
 void render_heartbeat() {
@@ -258,37 +281,37 @@ void render_buffer() {
                 break;
         case 1: render_psycho();
                 break;
-        case 2: render_heartbeat();
+        case 2: render_rain();
                 break;
-        case 3: render_rain();
-                break;
+        case 3: render_clara();
+                 break;
         case 4: render_fire();
                 break;
-        case 5: render_character(2);
+        case 5: render_heartbeat();
                 break;
-        case 6: render_character(3);
+        case 6: render_character(2);
                 break;
-        case 7: render_character(4);
+        case 7: render_character(3);
                 break;
-        case 8: render_character(5);
+        case 8: render_character(4);
                 break;
-        case 9: render_character(6);
+        case 9: render_character(5);
+                break;
+        case 10: render_character(6);
                  break;
-        case 10: render_character(7);
+        case 11: render_character(7);
                  break;
-        case 11: render_character(8);
+        case 12: render_character(8);
                  break;
-        case 12: render_character(9);
+        case 13: render_character(9);
                  break;
-        case 13: render_character(10);
+        case 14: render_character(10);
                  break;
-        case 14: render_character(11);
+        case 15: render_character(11);
                  break;
-        case 15: render_character(12);
+        case 16: render_character(12);
                  break;
-        case 16: render_character(13);
-                 break;
-        case 17: render_character(14);
+        case 17: render_character(13);
                  break;
     }
 }
@@ -328,7 +351,7 @@ void init() {
 
     sei();
 
-    mode = 4;   // Initial display pattern
+    mode = 3;   // Initial display pattern
 }
 
 //////////////////////////////////////////////////////////// 
