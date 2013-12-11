@@ -73,7 +73,7 @@ void clear_bitmap() {
 /////////////////////////////////////////////////////////////////////
 //                                   static 5x7 graphics / symbols //
 /////////////////////////////////////////////////////////////////////
-#define CHARS 18
+#define CHARS 20
 const unsigned char charset[CHARS][5] PROGMEM = {
     { 0xFF, 0x41, 0x5D, 0x41, 0xFF },   // psycho 2
     { 0x00, 0x3E, 0x22, 0x3E, 0x00 },   // psycho 1
@@ -89,11 +89,12 @@ const unsigned char charset[CHARS][5] PROGMEM = {
     { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
     { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
     { 0x3D, 0x66, 0x7C, 0x66, 0x3D },   // alien
-    { 0x30, 0xe, 0x5, 0xe, 0x30 },      //A
     { 0x12, 0x21, 0x21, 0x12, 0xc },    //C
+    { 0x21, 0x25, 0x25, 0x25, 0x3f },   //E
     { 0x20, 0x20, 0x20, 0x20, 0x3f },   //L
-    { 0x0, 0x36, 0x9, 0x9, 0x3f }       //R
-
+    { 0x3f, 0x2, 0xc, 0x2, 0x3f },      //M
+    { 0x3f, 0x10, 0xc, 0x2, 0x3f },     //N
+    { 0x12, 0x29, 0x2d, 0x25, 0x12 }   //S
 };
 
 
@@ -164,21 +165,25 @@ void render_psycho() {
         render_character(1);
 }
 
-void render_clara() {
+void render_clemens() {
     frame_delay = 40;
-    switch(frame%25) {
+    switch(frame%33) {
 
-        case 0: render_character(15); //C
+        case 0: render_character(14); //C
                 break;
         case 4: render_character(16); //L
                 break;
-        case 8: render_character(14); //A
+        case 8: render_character(15); //E
                 break;
-        case 12: render_character(17); //R
+        case 12: render_character(17); //M
+                break;
+        case 16: render_character(15); //E
+                break;
+        case 20: render_character(18); //N
                  break;
-        case 16: render_character(14); //A
+        case 24: render_character(19); //S
                  break;
-        case 20: clear_bitmap();
+        case 28: clear_bitmap();
                  break;
     }
 }
@@ -283,7 +288,7 @@ void render_buffer() {
                 break;
         case 2: render_rain();
                 break;
-        case 3: render_clara();
+        case 3: render_clemens();
                  break;
         case 4: render_fire();
                 break;
