@@ -1,5 +1,5 @@
 TinyMatrix
-----------
+==========
 
 TinyMatrix is a project by TigerUp and can be found [here](https://sites.google.com/site/tinymatrix/). 
 
@@ -9,7 +9,7 @@ I also added a script that generates the required hex sequences from ASCII art f
 
 
 How to make your own Tinymatrix
--------------------------------
+===============================
 
 You need on the hardware side:
  * ATtiny2313 or ATtiny4313
@@ -24,7 +24,7 @@ Now follow the instructions on the [original TinyMatrix site](https://sites.goog
 
 
 How to modify the source code to add your own pictures or animations
---------------------------------------------------------------------
+====================================================================
 
 Do the below (whatever you want and need), but keep in mind that the storage on the ATtiny2313 is very limited - you have got about 200 Bytes to do what you want if you want to keep all animations and pictures that are on there now.
 
@@ -32,9 +32,9 @@ When you are done, do a `make clean && make && sudo make flash` (you might have 
 
 
 How to add static pictures
-==========================
+--------------------------
 
-Write an ASCII file with the image you want. `#` signifies a lit LED. Take care to have at least five characters in every row, else the image generator will not work as expected. Save the file(s) with the extension `.pixx` in the img=generator folder.
+Write an ASCII file with the image you want. `#` signifies a lit LED. Take care to have at least five characters in every row, else the image generator will not work as expected. Save the file(s) with the extension `.pixx` in the img-generator folder.
 
 From that folder, call `generate.py`. **Note:** Python 3 is required to execute this script.
 
@@ -45,7 +45,7 @@ Continue at "How to change the image order" or else your image will not appear.
 
 
 How to add animations
-=====================
+---------------------
 
 Have a look at the `render_*()` functions in `src/main.c` and build one like it. `bitmap[a][b]` refers to the dot matrix, `render_character(i)` renders the image found at position `i` in the `charset` array, `clear_bitmap()` does exactly that.
 
@@ -54,7 +54,7 @@ Continue at "How to change the image order" or else your animation will not appe
 
 
 How to change the image order
-=============================
+-----------------------------
 
 Change it around int the render_buffer() function. You can either call a function or render an image by calling `render_character(i)` which renders the image at index `i` of the `charset` array. 
 
