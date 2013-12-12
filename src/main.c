@@ -89,11 +89,12 @@ const unsigned char charset[CHARS][5] PROGMEM = {
     { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
     { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
     { 0x3D, 0x66, 0x7C, 0x66, 0x3D },   // alien
-    { 0x30, 0xe, 0x5, 0xe, 0x30 },      //A
-    { 0x3f, 0xc, 0xc, 0xc, 0x3f },      //H
-    { 0x1f, 0x20, 0x20, 0x20, 0x10 },   //J
+    { 0x21, 0x25, 0x25, 0x25, 0x3f },   //E
+    { 0x1a, 0x29, 0x21, 0x33, 0x1e },   //G
+    { 0x0, 0x21, 0x3f, 0x21, 0x0 },   //I
     { 0x3f, 0x10, 0xc, 0x2, 0x3f },     //N
-    { 0xc, 0x33, 0x21, 0x33, 0xc }      //O
+    { 0x12, 0x29, 0x2d, 0x25, 0x12 }    //S
+
 
 };
 
@@ -167,23 +168,21 @@ void render_psycho() {
 
 void render_johanna() {
     frame_delay = 40;
-    switch(frame%33) {
+    switch(frame%29) {
 
-        case 0: render_character(16); //J
+        case 0: render_character(15); //G
                 break;
-        case 4: render_character(18); //O
+        case 4: render_character(14); //E
                 break;
-        case 8: render_character(15); //H
+        case 8: render_character(18); //S
                 break;
-        case 12: render_character(14); //A
+        case 12: render_character(16); //I
                 break;
         case 16: render_character(17); //N
                 break;
-        case 20: render_character(17); //N
+        case 20: render_character(14); //E
                  break;
-        case 24: render_character(14); //A
-                 break;
-        case 28: clear_bitmap();
+        case 24: clear_bitmap();
                  break;
     }
 }
