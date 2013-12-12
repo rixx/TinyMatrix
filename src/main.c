@@ -73,7 +73,7 @@ void clear_bitmap() {
 /////////////////////////////////////////////////////////////////////
 //                                   static 5x7 graphics / symbols //
 /////////////////////////////////////////////////////////////////////
-#define CHARS 20
+#define CHARS 19
 const unsigned char charset[CHARS][5] PROGMEM = {
     { 0xFF, 0x41, 0x5D, 0x41, 0xFF },   // psycho 2
     { 0x00, 0x3E, 0x22, 0x3E, 0x00 },   // psycho 1
@@ -89,12 +89,12 @@ const unsigned char charset[CHARS][5] PROGMEM = {
     { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
     { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
     { 0x3D, 0x66, 0x7C, 0x66, 0x3D },   // alien
-    { 0x12, 0x21, 0x21, 0x12, 0xc },    //C
-    { 0x21, 0x25, 0x25, 0x25, 0x3f },   //E
-    { 0x20, 0x20, 0x20, 0x20, 0x3f },   //L
-    { 0x3f, 0x2, 0xc, 0x2, 0x3f },      //M
+    { 0x30, 0xe, 0x5, 0xe, 0x30 },      //A
+    { 0x3f, 0xc, 0xc, 0xc, 0x3f },      //H
+    { 0x1f, 0x20, 0x20, 0x20, 0x10 },   //J
     { 0x3f, 0x10, 0xc, 0x2, 0x3f },     //N
-    { 0x12, 0x29, 0x2d, 0x25, 0x12 }   //S
+    { 0xc, 0x33, 0x21, 0x33, 0xc }      //O
+
 };
 
 
@@ -165,23 +165,23 @@ void render_psycho() {
         render_character(1);
 }
 
-void render_clemens() {
+void render_johanna() {
     frame_delay = 40;
     switch(frame%33) {
 
-        case 0: render_character(14); //C
+        case 0: render_character(16); //J
                 break;
-        case 4: render_character(16); //L
+        case 4: render_character(18); //O
                 break;
-        case 8: render_character(15); //E
+        case 8: render_character(15); //H
                 break;
-        case 12: render_character(17); //M
+        case 12: render_character(14); //A
                 break;
-        case 16: render_character(15); //E
+        case 16: render_character(17); //N
                 break;
-        case 20: render_character(18); //N
+        case 20: render_character(17); //N
                  break;
-        case 24: render_character(19); //S
+        case 24: render_character(14); //A
                  break;
         case 28: clear_bitmap();
                  break;
@@ -288,7 +288,7 @@ void render_buffer() {
                 break;
         case 2: render_rain();
                 break;
-        case 3: render_clemens();
+        case 3: render_johanna();
                  break;
         case 4: render_fire();
                 break;
