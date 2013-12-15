@@ -18,7 +18,7 @@ all: $(OBJECTS)
 	$(OBJCOPY) -j .text -j .data -O ihex $(OUTPUT).elf $(OUTPUT).elf.ihex
 
 flash:
-	$(AVRDUDE) -p$(CPUTYPE) -cstk500v2 -P/dev/ttyACM3 -Uflash:w:$(OUTPUT).elf.ihex:i -U hfuse:w:0xDF:m -U lfuse:w:0xE2:m -B 10
+	$(AVRDUDE) -p$(CPUTYPE) -cstk500v2 -P/dev/ttyACM0 -Uflash:w:$(OUTPUT).elf.ihex:i -U hfuse:w:0xDF:m -U lfuse:w:0xE2:m -B 10
 
 clean:
 	rm $(OBJECTS) $(OUTPUT).elf $(OUTPUT).elf.ihex -f
