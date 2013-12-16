@@ -178,10 +178,10 @@ void render_wave() {
     clear_bitmap();
 
 
-    for (c = 0; c < COLS; c++) {
-        for (r = 0; r < ROWS; r++) {
-            on = abs((COLS) - ((frame%8))-c-1*(r%2));
-            bitmap[r][c] = !(on) | !(on-3) | !(on-6);
+    for (c = COLS; c--;) {
+        for (r = ROWS; r--;) {
+            on = abs((COLS) - ((frame%8))+c-1*(r%2));
+            bitmap[r][c] = !(on+1) | !(on-2) | !(on-5) | !(on-8) | !(on-11);
         }
     }
 }
