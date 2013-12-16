@@ -73,19 +73,19 @@ void clear_bitmap() {
 /////////////////////////////////////////////////////////////////////
 //                                   static 5x7 graphics / symbols //
 /////////////////////////////////////////////////////////////////////
-#define CHARS 13
+#define CHARS 11
 const unsigned char charset[CHARS][5] PROGMEM = {
     { 0xFF, 0x41, 0x5D, 0x41, 0xFF },   // psycho 2
     { 0x00, 0x3E, 0x22, 0x3E, 0x00 },   // psycho 1
     { 0x0C, 0x12, 0x24, 0x12, 0x0C },   // heart
     { 0x08, 0x14, 0x2A, 0x14, 0x08 },   // diamond
-    { 0x07, 0x49, 0x71, 0x49, 0x07 },   // cup
+    // { 0x07, 0x49, 0x71, 0x49, 0x07 },   // cup
     { 0x22, 0x14, 0x6B, 0x14, 0x22 },   // star2
     { 0x36, 0x36, 0x08, 0x36, 0x36 },   // star3
     { 0x2a, 0x14, 0x7f, 0x14, 0x2a },   //snowflake
     { 0x2a, 0x1c, 0x36, 0x1c, 0x2a },   //snowflake2
     { 0x14, 0x5e, 0x7f, 0x5e, 0x14 },   //tree_full
-    { 0x7b, 0x7c, 0x7c, 0x7a, 0x7a },   //present
+    // { 0x7b, 0x7c, 0x7c, 0x7a, 0x7a },   //present
     { 0x38, 0x7c, 0x7f, 0x74, 0x38 },   //ball
     { 0x7e, 0x29, 0x7d, 0x2, 0x0 },   //sled
 
@@ -178,8 +178,8 @@ void render_wave() {
     clear_bitmap();
 
 
-    for (c = COLS; c--;) {
-        for (r = ROWS; r--;) {
+    for (c = 0; c < COLS; c++) {
+        for (r = 0; r < ROWS; r++) {
             on = abs((COLS) - ((frame%8))-c-1*(r%2));
             bitmap[r][c] = !(on) | !(on-3) | !(on-6);
         }
@@ -301,7 +301,7 @@ void render_fire() {
 
 
 // renders the correct image / animation onto the bitmap
-#define MODES 17
+#define MODES 15
 void render_buffer() {
     frame++;
     need_render_frame = 0;
@@ -336,10 +336,6 @@ void render_buffer() {
         case 13: render_character(9);
                  break;
         case 14: render_character(10);
-                 break;
-        case 15: render_character(11);
-                 break;
-        case 16: render_character(12);
                  break;
     }
 }
