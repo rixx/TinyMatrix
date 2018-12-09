@@ -20,7 +20,7 @@
 #include "firmware.c"
 
 
-char bitmap[ROWS][COLS];    
+char bitmap[ROWS][COLS];
 char need_refresh_line;
 char need_render_frame;
 unsigned char current_row;      // current lit row
@@ -36,7 +36,7 @@ int b1;   // button states
 ISR(TIMER0_COMPA_vect) {
     need_refresh_line = 1;  // flag to display new row of LEDs
 
-    if (++current_row >= ROWS) 
+    if (++current_row >= ROWS)
         current_row = 0;
 
     if (t++ % frame_delay == 0)
@@ -50,9 +50,9 @@ void refresh_line() {
 
     reset_led();
     set_row(current_row);
-    
-    for (c = 0; c < COLS; c++) 
-        if (bitmap[current_row][c]) 
+
+    for (c = 0; c < COLS; c++)
+        if (bitmap[current_row][c])
             set_column(c);
 
     need_refresh_line = 0;
@@ -69,12 +69,10 @@ void clear_bitmap() {
 }
 
 
-
 /////////////////////////////////////////////////////////////////////
 //                                   static 5x7 graphics / symbols //
 /////////////////////////////////////////////////////////////////////
-#define CHARS 15
-const unsigned char charset[CHARS][5] PROGMEM = {
+const unsigned char pictograms[14][5] PROGMEM = {
     { 0xFF, 0x41, 0x5D, 0x41, 0xFF },   // psycho 2
     { 0x00, 0x3E, 0x22, 0x3E, 0x00 },   // psycho 1
     { 0x0E, 0x3B, 0x17, 0x3B, 0x0E },   // skull
@@ -89,39 +87,146 @@ const unsigned char charset[CHARS][5] PROGMEM = {
     { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
     { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
     { 0x3D, 0x66, 0x7C, 0x66, 0x3D },   // alien
-//    { 0x30, 0xe, 0x5, 0xe, 0x30 },      //A
-//    { 0x12, 0x21, 0x21, 0x12, 0xc },    //C
-//    { 0x21, 0x25, 0x25, 0x25, 0x3f },   //E
-//    { 0x1a, 0x29, 0x21, 0x33, 0x1e },   //G
-//    { 0x3f, 0xc, 0xc, 0xc, 0x3f },      //H
-//    { 0x0, 0x21, 0x3f, 0x21, 0x0 },     //I
-//    { 0x1f, 0x20, 0x20, 0x20, 0x10 },   //J
-//    { 0x20, 0x20, 0x20, 0x20, 0x3f },   //L
-//    { 0x3f, 0x2, 0xc, 0x2, 0x3f },      //M
-//    { 0x3f, 0x10, 0xc, 0x2, 0x3f },     //N
-//    { 0xc, 0x33, 0x21, 0x33, 0xc }      //O
-//    { 0x0, 0x36, 0x9, 0x9, 0x3f }       //R
-//    { 0x12, 0x29, 0x2d, 0x25, 0x12 }    //S
-
-
 };
 
+const unsigned char charset[96][5] PROGMEM = {
+    { 0x00, 0x00, 0x00, 0x00, 0x00 }, // (space)
+    { 0x00, 0x00, 0x5F, 0x00, 0x00 }, // !
+    { 0x00, 0x07, 0x00, 0x07, 0x00 }, // "
+    { 0x14, 0x7F, 0x14, 0x7F, 0x14 }, // #
+    { 0x24, 0x2A, 0x7F, 0x2A, 0x12 }, // $
+    { 0x23, 0x13, 0x08, 0x64, 0x62 }, // %
+    { 0x36, 0x49, 0x55, 0x22, 0x50 }, // &
+    { 0x00, 0x05, 0x03, 0x00, 0x00 }, // '
+    { 0x00, 0x1C, 0x22, 0x41, 0x00 }, // (
+    { 0x00, 0x41, 0x22, 0x1C, 0x00 }, // )
+    { 0x08, 0x2A, 0x1C, 0x2A, 0x08 }, // *
+    { 0x08, 0x08, 0x3E, 0x08, 0x08 }, // +
+    { 0x00, 0x50, 0x30, 0x00, 0x00 }, // ,
+    { 0x08, 0x08, 0x08, 0x08, 0x08 }, // -
+    { 0x00, 0x60, 0x60, 0x00, 0x00 }, // .
+    { 0x20, 0x10, 0x08, 0x04, 0x02 }, // /
+    { 0x3E, 0x51, 0x49, 0x45, 0x3E }, // 0
+    { 0x00, 0x42, 0x7F, 0x40, 0x00 }, // 1
+    { 0x42, 0x61, 0x51, 0x49, 0x46 }, // 2
+    { 0x21, 0x41, 0x45, 0x4B, 0x31 }, // 3
+    { 0x18, 0x14, 0x12, 0x7F, 0x10 }, // 4
+    { 0x27, 0x45, 0x45, 0x45, 0x39 }, // 5
+    { 0x3C, 0x4A, 0x49, 0x49, 0x30 }, // 6
+    { 0x01, 0x71, 0x09, 0x05, 0x03 }, // 7
+    { 0x36, 0x49, 0x49, 0x49, 0x36 }, // 8
+    { 0x06, 0x49, 0x49, 0x29, 0x1E }, // 9
+    { 0x00, 0x36, 0x36, 0x00, 0x00 }, // :
+    { 0x00, 0x56, 0x36, 0x00, 0x00 }, // ;
+    { 0x00, 0x08, 0x14, 0x22, 0x41 }, // <
+    { 0x14, 0x14, 0x14, 0x14, 0x14 }, // =
+    { 0x41, 0x22, 0x14, 0x08, 0x00 }, // >
+    { 0x02, 0x01, 0x51, 0x09, 0x06 }, // ?
+    { 0x32, 0x49, 0x79, 0x41, 0x3E }, // @
+    { 0x7E, 0x11, 0x11, 0x11, 0x7E }, // A
+    { 0x7F, 0x49, 0x49, 0x49, 0x36 }, // B
+    { 0x3E, 0x41, 0x41, 0x41, 0x22 }, // C
+    { 0x7F, 0x41, 0x41, 0x22, 0x1C }, // D
+    { 0x7F, 0x49, 0x49, 0x49, 0x41 }, // E
+    { 0x7F, 0x09, 0x09, 0x01, 0x01 }, // F
+    { 0x3E, 0x41, 0x41, 0x51, 0x32 }, // G
+    { 0x7F, 0x08, 0x08, 0x08, 0x7F }, // H
+    { 0x00, 0x41, 0x7F, 0x41, 0x00 }, // I
+    { 0x20, 0x40, 0x41, 0x3F, 0x01 }, // J
+    { 0x7F, 0x08, 0x14, 0x22, 0x41 }, // K
+    { 0x7F, 0x40, 0x40, 0x40, 0x40 }, // L
+    { 0x7F, 0x02, 0x04, 0x02, 0x7F }, // M
+    { 0x7F, 0x04, 0x08, 0x10, 0x7F }, // N
+    { 0x3E, 0x41, 0x41, 0x41, 0x3E }, // O
+    { 0x7F, 0x09, 0x09, 0x09, 0x06 }, // P
+    { 0x3E, 0x41, 0x51, 0x21, 0x5E }, // Q
+    { 0x7F, 0x09, 0x19, 0x29, 0x46 }, // R
+    { 0x46, 0x49, 0x49, 0x49, 0x31 }, // S
+    { 0x01, 0x01, 0x7F, 0x01, 0x01 }, // T
+    { 0x3F, 0x40, 0x40, 0x40, 0x3F }, // U
+    { 0x1F, 0x20, 0x40, 0x20, 0x1F }, // V
+    { 0x7F, 0x20, 0x18, 0x20, 0x7F }, // W
+    { 0x63, 0x14, 0x08, 0x14, 0x63 }, // X
+    { 0x03, 0x04, 0x78, 0x04, 0x03 }, // Y
+    { 0x61, 0x51, 0x49, 0x45, 0x43 }, // Z
+    { 0x00, 0x00, 0x7F, 0x41, 0x41 }, // [
+    { 0x02, 0x04, 0x08, 0x10, 0x20 }, // "\"
+    { 0x41, 0x41, 0x7F, 0x00, 0x00 }, // ]
+    { 0x04, 0x02, 0x01, 0x02, 0x04 }, // ^
+    { 0x40, 0x40, 0x40, 0x40, 0x40 }, // _
+    { 0x00, 0x01, 0x02, 0x04, 0x00 }, // `
+    { 0x20, 0x54, 0x54, 0x54, 0x78 }, // a
+    { 0x7F, 0x48, 0x44, 0x44, 0x38 }, // b
+    { 0x38, 0x44, 0x44, 0x44, 0x20 }, // c
+    { 0x38, 0x44, 0x44, 0x48, 0x7F }, // d
+    { 0x38, 0x54, 0x54, 0x54, 0x18 }, // e
+    { 0x08, 0x7E, 0x09, 0x01, 0x02 }, // f
+    { 0x08, 0x14, 0x54, 0x54, 0x3C }, // g
+    { 0x7F, 0x08, 0x04, 0x04, 0x78 }, // h
+    { 0x00, 0x44, 0x7D, 0x40, 0x00 }, // i
+    { 0x20, 0x40, 0x44, 0x3D, 0x00 }, // j
+    { 0x00, 0x7F, 0x10, 0x28, 0x44 }, // k
+    { 0x00, 0x41, 0x7F, 0x40, 0x00 }, // l
+    { 0x7C, 0x04, 0x18, 0x04, 0x78 }, // m
+    { 0x7C, 0x08, 0x04, 0x04, 0x78 }, // n
+    { 0x38, 0x44, 0x44, 0x44, 0x38 }, // o
+    { 0x7C, 0x14, 0x14, 0x14, 0x08 }, // p
+    { 0x08, 0x14, 0x14, 0x18, 0x7C }, // q
+    { 0x7C, 0x08, 0x04, 0x04, 0x08 }, // r
+    { 0x48, 0x54, 0x54, 0x54, 0x20 }, // s
+    { 0x04, 0x3F, 0x44, 0x40, 0x20 }, // t
+    { 0x3C, 0x40, 0x40, 0x20, 0x7C }, // u
+    { 0x1C, 0x20, 0x40, 0x20, 0x1C }, // v
+    { 0x3C, 0x40, 0x30, 0x40, 0x3C }, // w
+    { 0x44, 0x28, 0x10, 0x28, 0x44 }, // x
+    { 0x0C, 0x50, 0x50, 0x50, 0x3C }, // y
+    { 0x44, 0x64, 0x54, 0x4C, 0x44 }, // z
+    { 0x00, 0x08, 0x36, 0x41, 0x00 }, // {
+    { 0x00, 0x00, 0x7F, 0x00, 0x00 }, // |
+    { 0x00, 0x41, 0x36, 0x08, 0x00 }, // }
+    { 0x08, 0x08, 0x2A, 0x1C, 0x08 }, // ->
+    { 0x08, 0x1C, 0x2A, 0x08, 0x08 }  // <-
+};
 
-// renders character c onto the bitmap
-void render_character(int c) {
+// renders pictogram c onto the bitmap
+void render_pictogram(int c) {
     int x, y, byte;
 
     clear_bitmap();
 
     for (y = 0; y < ROWS; y++) {
-        byte = pgm_read_byte(&(charset[c][y]));
+        byte = pgm_read_byte(&(pictograms[c][y]));
 
         for (x = 0; x < COLS; x++) {
-            if (byte & _BV(0)) 
+            if (byte & _BV(0))
                 bitmap[y][x] = 1;
             byte = byte >> 1;
-        }       
-    }   
+        }
+    }
+}
+
+// renders character c onto the bitmap
+void render_character(char c) {
+    int x, y, byte;
+
+    clear_bitmap();
+
+    for (y = 0; y < ROWS; y++) {
+        byte = pgm_read_byte(&(charset[c - 32][abs(y - 4)]));
+
+        for (x = 0; x < COLS; x++) {
+            if (byte & _BV(0))
+                bitmap[y][x] = 1;
+            byte = byte >> 1;
+        }
+    }
+}
+
+void render_string(char* string, int length) {
+    frame_delay = 60;
+    int frame_at = frame % (length * 4);
+    if (frame_at % 4 != 0) return;
+    render_character(string[frame_at / 4]);
 }
 
 
@@ -149,15 +254,15 @@ void render_rain() {
 
     // this is a modulus based particle system
 
-    y = frame%19;   
-    if (y < COLS) 
+    y = frame%19;
+    if (y < COLS)
         bitmap[0][y] = 1;
 
-    y = frame%11;   
+    y = frame%11;
     if (y < COLS)
         bitmap[2][y] = 1;
 
-    y = frame%17;   
+    y = frame%17;
     if (y < COLS)
         bitmap[4][y] = 1;
 }
@@ -167,32 +272,34 @@ void render_psycho() {
     frame_delay = 30;
 
     // simple 2 frame animation
-    
+
     if (frame%2)
-        render_character(0);
+        render_pictogram(0);
     else
-        render_character(1);
+        render_pictogram(1);
 }
 
-void render_name() {
-/*    frame_delay = 40;
-    switch(frame%29) { //frame % ((number of chars) * 4 + 5)
 
-        case 0: render_character(15); //G
-                break;
-        case 4: render_character(14); //E
-                break;
-        case 8: render_character(18); //S
-                break;
-        case 12: render_character(16); //I
-                break;
-        case 16: render_character(17); //N
-                break;
-        case 20: render_character(14); //E
-                 break;
-        case 24: clear_bitmap();
-                 break;
-    }*/
+
+void render_ready_to_code() {
+    render_string("Ready to Code", 13);
+    // frame_delay = 40;
+    // switch(frame%53) { //frame % ((number of chars) * 4 + 5)
+    //
+    //     case 0: render_character(26); break; // R
+    //     case 4: render_character(17); break; // E
+    //     case 8: render_character(16); break; // D
+    //     case 12: render_character(29); break; // Y
+    //     case 16: clear_bitmap(); break;
+    //     case 20: render_character(28); break; // T
+    //     case 24: render_character(25); break; // O
+    //     case 28: clear_bitmap(); break;
+    //     case 32: render_character(15); break; // C
+    //     case 36: render_character(25); break; // O
+    //     case 40: render_character(16); break; // D
+    //     case 44: render_character(17); break; // E
+    //     case 48: clear_bitmap(); break;
+    // }
 }
 
 void render_heartbeat() {
@@ -201,14 +308,14 @@ void render_heartbeat() {
     // how to sequence frames using case statement
 
     switch (frame%10) {
-        case 0: render_character(3);
-                break;  
+        case 0: render_pictogram(3);
+                break;
         case 1: clear_bitmap();
-                break;  
-        case 2: render_character(3);
-                break;  
+                break;
+        case 2: render_pictogram(3);
+                break;
         case 3: clear_bitmap();
-                break;  
+                break;
     }
 }
 
@@ -287,44 +394,26 @@ void render_fire() {
 void render_buffer() {
     frame++;
     need_render_frame = 0;
-    
+
     switch (mode) {
-        case 0: render_checkerboard();
-                break;
-        case 1: render_psycho();
-                break;
-        case 2: render_rain();
-                break;
-        case 3: render_name();
-                 break;
-        case 4: render_fire();
-                break;
-        case 5: render_heartbeat();
-                break;
-        case 6: render_character(2);
-                break;
-        case 7: render_character(3);
-                break;
-        case 8: render_character(4);
-                break;
-        case 9: render_character(5);
-                break;
-        case 10: render_character(6);
-                 break;
-        case 11: render_character(7);
-                 break;
-        case 12: render_character(8);
-                 break;
-        case 13: render_character(9);
-                 break;
-        case 14: render_character(10);
-                 break;
-        case 15: render_character(11);
-                 break;
-        case 16: render_character(12);
-                 break;
-        case 17: render_character(13);
-                 break;
+        case 0: render_checkerboard(); break;
+        case 1: render_psycho(); break;
+        case 2: render_rain(); break;
+        case 3: render_ready_to_code(); break;
+        case 4: render_fire(); break;
+        case 5: render_heartbeat(); break;
+        case 6: render_pictogram(2); break;
+        case 7: render_pictogram(3); break;
+        case 8: render_pictogram(4); break;
+        case 9: render_pictogram(5); break;
+        case 10: render_pictogram(6); break;
+        case 11: render_pictogram(7); break;
+        case 12: render_pictogram(8); break;
+        case 13: render_pictogram(9); break;
+        case 14: render_pictogram(10); break;
+        case 15: render_pictogram(11); break;
+        case 16: render_pictogram(12); break;
+        case 17: render_pictogram(13); break;
     }
 }
 
@@ -335,7 +424,7 @@ void check_inputs() {
     // button 1 state (PORTD0 or PORTD6)
     if ((PIND & _BV(0)) == 0 || (PIND & _BV(6)) == 0)
         b1++;
-    else 
+    else
         b1 = 0;
 
     if (b1 == 10) {
@@ -366,19 +455,19 @@ void init() {
     mode = 3;   // Initial display pattern
 }
 
-//////////////////////////////////////////////////////////// 
-//                                              main loop // 
-//////////////////////////////////////////////////////////// 
-void main_loop() { 
+////////////////////////////////////////////////////////////
+//                                              main loop //
+////////////////////////////////////////////////////////////
+void main_loop() {
     for (EVER) {
         if (need_render_frame)
-            render_buffer();     
+            render_buffer();
 
-        if (need_refresh_line) {   
+        if (need_refresh_line) {
             refresh_line();
             check_inputs();
         }
-    }   
+    }
 }
 
 
@@ -391,4 +480,3 @@ int main(void) {
     main_loop();
     return (0);
 }
-
