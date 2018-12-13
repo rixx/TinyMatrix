@@ -72,7 +72,7 @@ void clear_bitmap() {
 /////////////////////////////////////////////////////////////////////
 //                                   static 5x7 graphics / symbols //
 /////////////////////////////////////////////////////////////////////
-const unsigned char pictograms[14][5] PROGMEM = {
+const unsigned char pictograms[22][5] PROGMEM = {
     { 0xFF, 0x41, 0x5D, 0x41, 0xFF },   // psycho 2
     { 0x00, 0x3E, 0x22, 0x3E, 0x00 },   // psycho 1
     { 0x0E, 0x3B, 0x17, 0x3B, 0x0E },   // skull
@@ -87,6 +87,16 @@ const unsigned char pictograms[14][5] PROGMEM = {
     { 0x7D, 0x5A, 0x1E, 0x5A, 0x7D },   // alien
     { 0x4E, 0x7B, 0x0F, 0x7B, 0x4E },   // alien
     { 0x3D, 0x66, 0x7C, 0x66, 0x3D },   // alien
+    { 0x14, 0x1e, 0x7f, 0x1e, 0x14 },   //tree
+    { 0x0, 0x7a, 0x7f, 0x7a, 0x0 },     //candle1
+    { 0x0, 0x78, 0x7f, 0x7a, 0x0 },     //candle2
+    { 0x0, 0x78, 0x7d, 0x7a, 0x0 },     //candle3
+    { 0x0, 0x78, 0x7c, 0x7b, 0x0 },     //candle4
+    { 0x0, 0x7a, 0x7f, 0x78, 0x0 },     //candle5
+    { 0x0, 0x7a, 0x7d, 0x78, 0x0 },     //candle6
+    { 0x0, 0x7b, 0x7c, 0x78, 0x0 },     //candle7
+
+
 };
 
 const unsigned char charset[96][5] PROGMEM = {
@@ -279,29 +289,6 @@ void render_psycho() {
         render_pictogram(1);
 }
 
-
-
-void render_ready_to_code() {
-    render_string("Ready to Code", 13);
-    // frame_delay = 40;
-    // switch(frame%53) { //frame % ((number of chars) * 4 + 5)
-    //
-    //     case 0: render_character(26); break; // R
-    //     case 4: render_character(17); break; // E
-    //     case 8: render_character(16); break; // D
-    //     case 12: render_character(29); break; // Y
-    //     case 16: clear_bitmap(); break;
-    //     case 20: render_character(28); break; // T
-    //     case 24: render_character(25); break; // O
-    //     case 28: clear_bitmap(); break;
-    //     case 32: render_character(15); break; // C
-    //     case 36: render_character(25); break; // O
-    //     case 40: render_character(16); break; // D
-    //     case 44: render_character(17); break; // E
-    //     case 48: clear_bitmap(); break;
-    // }
-}
-
 void render_heartbeat() {
     frame_delay = 40;
 
@@ -388,6 +375,40 @@ void render_fire() {
         bitmap[4][6-r] = 1;
 }
 
+void render_candle() {
+    frame_delay = 100;
+
+
+    switch (frame%13) {
+        case 0: render_pictogram(15);
+                break;
+        case 1: render_pictogram(16);
+                break;
+        case 2: render_pictogram(17);
+                break;
+        case 3: render_pictogram(18);
+                break;
+        case 4: render_pictogram(17);
+                break;
+        case 5: render_pictogram(16);
+                break;
+        case 6: render_pictogram(15);
+                break;
+        case 7: render_pictogram(19);
+                break;
+        case 8: render_pictogram(20);
+                break;
+        case 9: render_pictogram(21);
+                break;
+        case 10: render_pictogram(20);
+                break;
+        case 11: render_pictogram(19);
+                break;
+        case 12: render_pictogram(15);
+                break;
+    }
+}
+
 
 // renders the correct image / animation onto the bitmap
 #define MODES 18
@@ -399,7 +420,8 @@ void render_buffer() {
         case 0: render_checkerboard(); break;
         case 1: render_psycho(); break;
         case 2: render_rain(); break;
-        case 3: render_ready_to_code(); break;
+        // case 3: render_string("Freifunk ", 9); break;
+        case 3: render_candle(); break;
         case 4: render_fire(); break;
         case 5: render_heartbeat(); break;
         case 6: render_pictogram(2); break;
@@ -413,7 +435,8 @@ void render_buffer() {
         case 14: render_pictogram(10); break;
         case 15: render_pictogram(11); break;
         case 16: render_pictogram(12); break;
-        case 17: render_pictogram(13); break;
+        case 17: render_pictogram(14); break;
+
     }
 }
 
