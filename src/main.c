@@ -52,7 +52,7 @@ void refresh_line() {
     set_row(current_row);
 
     for (c = 0; c < COLS; c++)
-        if (bitmap[current_row][c])
+        if (bitmap[ROWS - current_row - 1][COLS - c - 1])
             set_column(c);
 
     need_refresh_line = 0;
